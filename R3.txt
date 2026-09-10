@@ -1,0 +1,43 @@
+! =====================================================
+! R3 Configuration
+! =====================================================
+enable
+configure terminal
+
+hostname R3
+
+no ip domain-lookup
+
+! --- Interfaces ---
+interface FastEthernet1/0
+ description LAN link to R1
+ ip address 10.0.13.2 255.255.255.252
+ no shutdown
+ exit
+
+interface FastEthernet2/0
+ description LAN link to R4
+ ip address 10.0.34.1 255.255.255.252
+ no shutdown
+ exit
+
+interface Loopback0
+ description OSPF Router ID / test loopback
+ ip address 3.3.3.3 255.255.255.255
+ exit
+
+! --- OSPF Process ---
+router ospf 1
+ router-id 3.3.3.3
+ network 10.0.13.0 0.0.0.3 area 0
+ network 10.0.34.0 0.0.0.3 area 0
+ network 3.3.3.3 0.0.0.0 area 0
+ passive-interface Loopback0
+ exit
+
+line con 0
+ logging synchronous
+ exit
+
+end
+write memory
