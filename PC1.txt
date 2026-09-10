@@ -1,0 +1,6 @@
+PC1 Addressing (set via Desktop > IP Configuration in Packet Tracer,
+or via a real host's network settings)
+=======================================================================
+IP Address:      192.168.4.1
+Subnet Mask:      255.255.255.0
+Default Gateway:  192.168.4.254   (R4 Gig0/0)
