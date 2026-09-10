@@ -1,0 +1,57 @@
+! =====================================================
+! R4 Configuration
+! =====================================================
+enable
+configure terminal
+
+hostname R4
+
+no ip domain-lookup
+
+! --- Interfaces ---
+interface FastEthernet1/0
+ description LAN link to R2
+ ip address 10.0.24.2 255.255.255.252
+ no shutdown
+ exit
+
+interface FastEthernet2/0
+ description LAN link to R3
+ ip address 10.0.34.2 255.255.255.252
+ no shutdown
+ exit
+
+interface GigabitEthernet0/0
+ description LAN - connects to access switch / PC1
+ ip address 192.168.4.254 255.255.255.0
+ no shutdown
+ exit
+
+interface GigabitEthernet0/1
+ description LAN - secondary link to access switch
+ no shutdown
+ exit
+
+interface Loopback0
+ description OSPF Router ID / test loopback
+ ip address 4.4.4.4 255.255.255.255
+ exit
+
+! --- OSPF Process ---
+router ospf 1
+ router-id 4.4.4.4
+ network 10.0.24.0 0.0.0.3 area 0
+ network 10.0.34.0 0.0.0.3 area 0
+ network 192.168.4.0 0.0.0.255 area 0
+ network 4.4.4.4 0.0.0.0 area 0
+ ! No OSPF neighbors expected on the LAN side or loopback
+ passive-interface GigabitEthernet0/0
+ passive-interface Loopback0
+ exit
+
+line con 0
+ logging synchronous
+ exit
+
+end
+write memory
