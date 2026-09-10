@@ -1,0 +1,38 @@
+! =====================================================
+! SW1 (access switch) Configuration
+! Connects R4 (Gig0/0, Gig0/1) to PC1 (Fa0/1)
+! =====================================================
+enable
+configure terminal
+
+hostname SW1
+
+no ip domain-lookup
+
+interface range GigabitEthernet0/1 - 2
+ description Uplinks to R4
+ switchport mode access
+ switchport access vlan 1
+ no shutdown
+ exit
+
+interface FastEthernet0/1
+ description Link to PC1
+ switchport mode access
+ switchport access vlan 1
+ no shutdown
+ exit
+
+interface Vlan1
+ ip address 192.168.4.253 255.255.255.0
+ no shutdown
+ exit
+
+ip default-gateway 192.168.4.254
+
+line con 0
+ logging synchronous
+ exit
+
+end
+write memory
