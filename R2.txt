@@ -1,0 +1,43 @@
+! =====================================================
+! R2 Configuration
+! =====================================================
+enable
+configure terminal
+
+hostname R2
+
+no ip domain-lookup
+
+! --- Interfaces ---
+interface GigabitEthernet0/0
+ description LAN link to R1
+ ip address 10.0.12.2 255.255.255.252
+ no shutdown
+ exit
+
+interface FastEthernet1/0
+ description LAN link to R4
+ ip address 10.0.24.1 255.255.255.252
+ no shutdown
+ exit
+
+interface Loopback0
+ description OSPF Router ID / test loopback
+ ip address 2.2.2.2 255.255.255.255
+ exit
+
+! --- OSPF Process ---
+router ospf 1
+ router-id 2.2.2.2
+ network 10.0.12.0 0.0.0.3 area 0
+ network 10.0.24.0 0.0.0.3 area 0
+ network 2.2.2.2 0.0.0.0 area 0
+ passive-interface Loopback0
+ exit
+
+line con 0
+ logging synchronous
+ exit
+
+end
+write memory
